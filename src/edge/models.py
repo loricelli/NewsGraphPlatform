@@ -1,4 +1,7 @@
 from django.db import models
+from django.db.models import Q
+import random
+
 
 class Edge(models.Model):
     tail = models.ForeignKey("node.Node", on_delete=models.CASCADE, related_name='tail')
@@ -9,5 +12,15 @@ class Edge(models.Model):
 
     def __str__(self):
         return str(self.tail)+ "-->"+str(self.head)
+
+    @classmethod
+    def get_random_edge(self):
+        default_color = "violet"
+        edges_list = self._meta.model.objects.filter(~Q(tail__color=default_color),head__color=default_color,stance=-1)
+        if edges_list:
+            random_edge = random.choice(edges_list)
+            return random_edge
+        else:
+            return edges_list
 
 
