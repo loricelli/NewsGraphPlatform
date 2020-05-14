@@ -24,6 +24,6 @@ urlpatterns = [
     path('', home_view,name='home'),
     path('read_news/',tail_news,name='read'),
     path('compare_news/<int:edge_id>', head_news, name="compare"),
-    path('confirm/<int:edge_id>/<int:vote>', create_confirmation, name="confirm"),
+    path('confirm/<int:edge_id>-<int:vote>', create_confirmation, name="confirm"),
 
 ]

@@ -23,4 +23,25 @@ class Edge(models.Model):
         else:
             return edges_list
 
+    def color_edge(self):
+        discuss = 0
+        agree = 1
+        disagree = 2
+        stance = self.stance
+        tail_source = self.tail.news.source
+        head_source = self.head.news.source
+        if stance == agree:
+            if tail_source != head_source:
+                self.color = "#196b0e"
+            else:
+                self.color = "#72ed61"
+        elif stance == disagree:
+            if tail_source != head_source:
+                self.color = "#bf0404"
+            else:
+                self.color = "#fa7b0c"
+        elif stance == discuss:
+            self.color = "#0b40d4"
+        self.save()
+
 
