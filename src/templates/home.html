@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="jumbotron" style="text-align: center;">
-  <h1 class="display-4">NewsGraph!</h1>
-  <p class="lead">Clicca per iniziare a leggere notizie e guadagnare punti.</p>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<div class="jumbotron">
+  <div class = "jumbotron-text">
+    <h1 class="display-4">NewsGraph!</h1>
+    <p class="lead">Make the News world a better place.</p>
+  </div>
   <hr class="my-4">
-  <a class="btn btn-primary btn-lg" href="/read_news" role="button">Leggi Notizie</a>
+  <a class="btn btn-primary btn-lg" href="/read_news" role="button">Click to Begin!</a>
 </div>
 
 
@@ -16,85 +20,29 @@
 {{ edges|json_script:"edges" }}
 {{ nodes|json_script:"nodes" }}
 
-<h1 style="text-align:center"> Il Grafo </h1>
-<div id="chart"></div>
-<script>
+<h1 id="graph"> IL GRAFO </h1>
+<div class="row">
+  <div class="col-sm-4">
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Total News
+        <span class="badge badge-primary badge-pill"> {{ tot_news }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Analyzed News
+        <span class="badge badge-primary badge-pill"> {{ an_news }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Number of Users
+        <span class="badge badge-primary badge-pill"> {{ tot_usr }}</span>
+      </li>
+    </ul>
+  </div>
+  <div class="col-sm-8">
+    <svg id="chart"></svg>
+  </div>
+</div>
 
-  const ed = JSON.parse(document.getElementById('edges').textContent);
-  const nd = JSON.parse(document.getElementById('nodes').textContent);
-  s_t_ed = ed.replace(/tail/g,"source");
-  s_t_ed = s_t_ed.replace(/head/g,"target");
-
-  fin_ed = JSON.parse(s_t_ed);
-  console.log(fin_ed);
-  fin_nd = JSON.parse(nd);
-
-  width = 1200;
-  height = 800;
-
-  var svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
-  const simulation = d3.forceSimulation(fin_nd)
-    .force("link", d3.forceLink(fin_ed).id(d => d.id).distance(100))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width/ 3, height/ 3));
-
-  var link = svg.append("g")
-    .selectAll("line")
-    .data(fin_ed)
-    .join("line")
-    .attr("stroke", d => d.color )
-    .attr("stroke-width", d => Math.sqrt(d.value));
-
-
-  var node = svg.append("g")
-    .attr("stroke", "#fff")
-    .attr("stroke-width", 1.5)
-    .selectAll("circle")
-    .data(fin_nd)
-    .join("circle")
-    .attr("r", 8)
-        .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended))
-    .attr("fill", d => d.color );
-node.append("title")
-      .text(d => d.id);
-
-
-
-  simulation.on("tick", () => {
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
-
-    node
-      .attr("cx", d => d.x)
-      .attr("cy", d => d.y);
-  });
-
-
-function dragstarted(d) {
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
-}
-
-function dragged(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
-}
-
-function dragended(d) {
-  if (!d3.event.active) simulation.alphaTarget(0);
-  d.fx = null;
-  d.fy = null;
-}
-
-
-</script>
-
-
-{% endblock %}r
+<script src="{% static 'scripts/d3_graph.js' %}"></script>
+<script src="{% static 'scripts/alert_close.js' %}"></script>
+{% endblock %}

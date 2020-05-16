@@ -1,13 +1,12 @@
 from edge.models import Edge
 from node.models import Node
 from source.models import Source
-from voter.models import Voter
 from news.models import News
 
 import networkx as nx
 import pandas as pd
 
-graph_path = "/home/loricelli/Desktop/test.graphml"
+graph_path = "/home/loricelli/Desktop/small_text.graphml"
 data_path = "/home/loricelli/Github/thesis-spinoff/data/definitive_all.pkl"
 data = pd.read_pickle(data_path)
 data.drop_duplicates(subset=['url'],inplace=True)
@@ -16,7 +15,7 @@ data = data.sort_values(by='publish_date')
 data.reset_index(inplace=True,drop=True)
 
 
-data = data[32020:32050]
+data = data[31000:33000]
 new_graph = nx.read_graphml(graph_path)
 
 
@@ -28,8 +27,6 @@ user=User.objects.create_user('loricelli', password='1')
 user.is_superuser=True
 user.is_staff=True
 user.save()
-
-Voter.objects.create(user=user)
 print("user creato")
 
 for edge in Edge.objects.all():
