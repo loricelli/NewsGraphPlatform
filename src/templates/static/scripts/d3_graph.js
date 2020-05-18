@@ -21,7 +21,7 @@ const ed = JSON.parse(document.getElementById('edges').textContent);
     .data(fin_ed)
     .join("line")
     .attr("stroke", d => d.color )
-    .attr("stroke-width", d => 0.2);
+    .attr("stroke-width", d => 0.5);
 
 
   var node = svg.append("g")

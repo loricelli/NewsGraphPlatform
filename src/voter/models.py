@@ -6,6 +6,9 @@ from django.dispatch import receiver
 class Voter(models.Model):
     points = models.IntegerField(default=0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.user.username
 
     def increase_points(self):
         self.points += 1

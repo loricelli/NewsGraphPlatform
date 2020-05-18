@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<div class="jumbotron profile-jumbo jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Hi, {{user.username}}</h1>
+    <p class="lead jumbotron-text">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+  </div>
+</div>
+
+<div class="row main-profile">
+  <div class="badge-div">
+    <label class="badge badge-pill badge-primary">
+      <span class="pb-2 align-middle"> &nbsp;&nbsp;Info&nbsp;&nbsp;</span>
+    </label>
+    <hr>
+  </div>
+
+
+
+  <!-- CARD CONTAINER SECTION -->
+
+  <div class="row profile-row">
+    <div class="col col-md-3">
+
+      <div class="card" style="width: 12rem;">
+        <div class="card-body">
+          <h6 class="card-title">Confirmations</h6>
+          <h5 class="card-text">{{confirmations}}</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Points</h6>
+          <h5 class="card-text">{{points}}</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Streak</h6>
+          <h5 class="card-text">5 days</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Reading Time</h6>
+          <h5 class="card-text">~10 mins</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SECOND ROW -->
+
+  <div class="row profile-row second-on">
+    <div class="col col-md-6">
+      <div class="badge-div">
+        <label class="badge badge-pill badge-primary">
+          <span class="pb-2 align-middle"> &nbsp;&nbsp;Last Activities&nbsp;&nbsp;</span>
+        </label>
+        <hr>
+      </div>
+      <!-- FIRST HALF CONTENT -->
+      {% for act,delta in last_act%}
+      <p style="text-align:left;margin-bottom:0px;">
+        Evaluates pair as: {{act}} 
+        <span style="float:center;">
+          ?
+        </span>
+        <span class="deltatime">
+          {{delta.0}} d, {{delta.1}} h, {{delta.2}} m
+        </span>
+      </p>
+      <hr>
+      {% endfor %}
+
+    </div>
+    <div class="col col-md-6">
+      <div class="badge-div">
+        <label class="badge badge-pill badge-primary">
+          <span class="pb-2 align-middle"> &nbsp;&nbsp;Stats&nbsp;&nbsp;</span>
+        </label>
+        <hr>
+      </div>
+      <!-- SECOND HALF CONTENT -->
+      {{ count_array|json_script:"data" }}
+      <svg id="line"></svg>
+    </div>
+    <script>
+
+      const j_data = JSON.parse(document.getElementById('data').textContent);
+      var data = JSON.parse(j_data);
+      var margin = {top: 10, right: 30, bottom: 30, left: 60},
+        width = 600- margin.left - margin.right,
+        height = 300- margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      var svg = d3.select("#line")
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 600 500")
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+
+      var x = d3.scaleLinear()
+        .domain(d3.extent(data, function(d) { return Number(d.date__date.split("-")[2]); }))
+        .range([ 1, width ]);
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+
+      var y = d3.scaleLinear()
+        .domain([0, d3.max(data, function(d) { return d.dcount; })])
+        .range([ height, 0 ]);
+      svg.append("g")
+        .call(d3.axisLeft(y).ticks(5));
+
+      svg.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+          .x(function(d) { return x(d.date__date.split("-")[2]) })
+          .y(function(d) { return y(d.dcount) })
+        );
+
+    </script>
+  </div>
+
+
+</div>
+{% endblock %}

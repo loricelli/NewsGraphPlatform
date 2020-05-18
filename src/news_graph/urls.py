@@ -18,6 +18,7 @@ from django.urls import path
 from pages.views import home_view,signup,signin,signout
 from node.views import tail_news,head_news
 from confirmation.views import create_confirmation
+from voter.views import profile_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +26,7 @@ urlpatterns = [
     path('signup/', signup,name='signup'),
     path('signin/', signin,name='signin'),
     path('signout/', signout,name='signout'),
+    path('profile/', profile_page,name='profile'),
     path('read_news/',tail_news,name='read'),
     path('compare_news/<int:edge_id>', head_news, name="compare"),
     path('confirm/<int:edge_id>-<int:vote>', create_confirmation, name="confirm"),

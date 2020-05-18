@@ -3,6 +3,7 @@ from voter.models import Voter
 from edge.models import Edge
 from django.db.models.signals import post_save
 from collections import Counter
+from datetime import datetime
 
 max_confirmations = 1
 
@@ -10,6 +11,7 @@ class Confirmation(models.Model):
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
     edge = models.ForeignKey(Edge, on_delete=models.CASCADE)
     vote = models.IntegerField()
+    date = models.DateTimeField(default=datetime.now, editable=False)
 
 def check_stance(edge):
     confirmations = Confirmation.objects.filter(edge=edge)

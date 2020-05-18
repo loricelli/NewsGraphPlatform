@@ -1,11 +1,13 @@
 <html>
   <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
   </head>
   <body>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="/">NewsGraph</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,18 +18,19 @@
           <a class="nav-item nav-link active" href="/admin">Admin<span class="sr-only">(current)</span></a>
           <a class="nav-item nav-link active" href="{% url 'signin' %}">Signin<span class="sr-only">(current)</span></a>
           <a class="nav-item nav-link active" href="{% url 'signout' %}">Signout<span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link active" href="{% url 'profile' %}">Profile<span class="sr-only">(current)</span></a>
         </div>
       </div>
     </nav>
     <script src = "https://d3js.org/d3.v4.min.js"></script> 
     {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" >
-          {{ message }}
-        </div>
-        {% endfor %}
-    {% endif %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" >
+      {{ message }}
+    </div>
+      {% endfor %}
+      {% endif %}
 
-    {% block content %} {% endblock %}
+      {% block content %} {% endblock %}
   </body>
 </html>

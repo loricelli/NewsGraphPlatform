@@ -21,7 +21,7 @@ def tail_news(request, *args, **kwargs):
             messages.info(request, "No news available! Try later.")
             return redirect("/")
     else:
-        messages.info(request, "You must be logged in!")
+        messages.warning(request, "You must be logged in!")
         return redirect("/")
 
 def head_news(request, *args, **kwargs):
