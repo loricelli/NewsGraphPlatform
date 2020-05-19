@@ -27,7 +27,7 @@ def profile_page(request, *args, **kwargs):
             'last_act': zip(last_act,diff_time),
             'count_array': count_json
         }
-        return render(request,"voters/profile2.html",context)
+        return render(request,"voters/profile.html",context)
     else:
         messages.warning(request, "You must be logged in!")
         return redirect('home')

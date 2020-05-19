@@ -89,3 +89,13 @@ body {
 .second-on {
   margin-top:10%;
 }
+
+.news-jumbo {
+  height: 40%;
+  text-align: center;
+}
+
+.news-body {
+  width: 50%;
+  margin-left: 25%;
+}

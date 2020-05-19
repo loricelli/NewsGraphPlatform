@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 {% block content%}
 
-<h1 style="text-align:center;margin-top:5%;"> {{edge.tail.news.title}} </h1>
-<div style="width:80%;margin-left:10%;">
-  <h5> {{edge.tail.news.body}} </h5>
-</div>
-
-<div class="container" style="margin-top:10%;">
-  <div class="row">
-    <div class="col-sm">
-    </div>
-    <div class="col-sm">
-      <form action={% url 'compare' edge_id=edge.id %}  method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Compare!" class="btn btn-primary" />
-      </form>
-    </div>
-    <div class="col-sm">
-    </div>
+<div class="jumbotron news-jumbo jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">{{edge.tail.news.title}}</h1>
+    <p class="lead jumbotron-text">{{edge.tail.news.source.name}}</p>
   </div>
 </div>
+<div class="news-body">
+  <p class="lead">
+    {{edge.tail.news.body}}
+  </p>
 
+  <div class="row justify-content-center" style="margin-top:5%;">
+    <form action={% url 'compare' edge_id=edge.id %}  method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Read the next one!" class="btn btn-primary" />
+    </form>
+  </div>
+
+
+</div>
 
 {% endblock %}
