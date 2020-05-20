@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from django.db.models import Count
 from django.core.serializers.json import DjangoJSONEncoder
 import json
+from math import ceil
 
 def profile_page(request, *args, **kwargs):
     if request.user.is_authenticated:
@@ -25,7 +26,10 @@ def profile_page(request, *args, **kwargs):
             'confirmations': n_confirm,
             'points': points,
             'last_act': zip(last_act,diff_time),
-            'count_array': count_json
+            'count_array': count_json,
+            'read_time': ceil(voter.reading_time),
+            'streak': voter.streak
+
         }
         return render(request,"voters/profile.html",context)
     else:

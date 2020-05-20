@@ -9,6 +9,7 @@ from django.db.models import Q
 from pages.forms import CreateVoterForm
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
+from datetime import date,timedelta
 
 def home_view(request, *args, **kwargs):
 
@@ -51,6 +52,19 @@ def signin(request):
         user = authenticate(request, username=uname, password=pwd)
 
         if user is not None:
+
+            if user.last_login:
+                today = date.today()
+                yesterday = today - timedelta(days=1)
+
+                last_login = user.last_login.date()
+                if last_login < yesterday:
+                    user.voter.streak = 1
+                    user.voter.save()
+                elif last_login == yesterday:
+                    user.voter.streak += 1
+                    user.voter.save()
+
             login(request,user)
             messages.success(request, uname + ' succesfully logged in!')
             return redirect('/')

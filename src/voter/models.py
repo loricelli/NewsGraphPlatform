@@ -6,7 +6,9 @@ from django.dispatch import receiver
 class Voter(models.Model):
     points = models.IntegerField(default=0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    
+    reading_time = models.FloatField(default=0.0)
+    streak = models.IntegerField(default=1)
+
     def __str__(self):
         return self.user.username
 
