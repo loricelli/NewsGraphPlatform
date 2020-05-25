@@ -6,20 +6,44 @@
 
   </head>
   <body>
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="/">NewsGraph</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-item nav-link active" href="/admin">Admin<span class="sr-only">(current)</span></a>
-          <a class="nav-item nav-link active" href="{% url 'signin' %}">Signin<span class="sr-only">(current)</span></a>
-          <a class="nav-item nav-link active" href="{% url 'signout' %}">Signout<span class="sr-only">(current)</span></a>
-          <a class="nav-item nav-link active" href="{% url 'profile' %}">Profile<span class="sr-only">(current)</span></a>
-        </div>
+
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-item nav-link" href="/#latest-fakes">Latest fakes<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-item nav-link" href="/#graph">NewsGraph<span class="sr-only">(current)</span></a>
+          </li>
+          {% if not user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-item nav-link" href="{% url 'signin' %}">Login<span class="sr-only">(current)</span></a>
+          </li>
+          {% else %}
+
+          <li class="nav-item">
+            <a class="nav-item nav-link" href="{% url 'read' %}">Pick news<span class="sr-only">(current)</span></a>
+          </li>
+          {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-item nav-link" href="/admin">Admin<span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-item nav-link" href="{% url 'profile' %}">{{user.username}}<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-item nav-link" href="{% url 'signout' %}">Logout<span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %}
+        </ul>
       </div>
     </nav>
     <script src = "https://d3js.org/d3.v4.min.js"></script> 

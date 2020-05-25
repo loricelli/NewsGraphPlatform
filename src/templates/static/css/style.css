@@ -15,14 +15,14 @@ body {
 
 .home-jumbotron {
   text-align: center;
-  background-image: url("/static/img/net2.jpg");
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("/static/img/net2.jpg");
   background-size: cover;
-  height: 60%;
+  height: 95%;
   color: white;
 }
 
 .jumbotron-text {
-  margin-top: 5%;
+  margin-top: 15%;
 }
 
 .alert {
@@ -30,21 +30,20 @@ body {
   text-align: center;
 }
 
-.home-list{
+.home-row {
   width: 80%;
   margin-left: 10%;
-  padding-top: 20%;
+  margin-top: 10%;
 }
 
-#graph {
+.home-titles{
   text-align: center;
-  margin-top: 10%;
+  padding-top: 10%;
 }
 
 .signup-form {
   margin-top: 20%;
 }
-
 
 
 /* Profile page */
@@ -93,6 +92,10 @@ body {
 .news-jumbo {
   height: 40%;
   text-align: center;
+}
+
+.news-jumbo-text {
+  margin-top: 5%;
 }
 
 .news-body {

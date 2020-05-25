@@ -21,7 +21,6 @@ def profile_page(request, *args, **kwargs):
         count_array = pad_dates(count_array)
         count_json = json.dumps(list(count_array),cls=DjangoJSONEncoder)
 
-        print(count_array)
         context = {
             'confirmations': n_confirm,
             'points': points,

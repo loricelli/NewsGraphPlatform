@@ -15,10 +15,8 @@ data = data.sort_values(by='publish_date')
 data.reset_index(inplace=True,drop=True)
 
 
-data = data[31000:33000]
+data = data[30000:33000]
 new_graph = nx.read_graphml(graph_path)
-
-
 old_graph = nx.DiGraph()
 
 
@@ -28,6 +26,9 @@ user.is_superuser=True
 user.is_staff=True
 user.save()
 print("user creato")
+
+user=User.objects.create_user('lorenzo', password='1')
+user.save()
 
 for edge in Edge.objects.all():
     old_graph.add_edge(str(edge.tail.news.news_id),str(edge.head.news.news_id))
@@ -41,10 +42,10 @@ for edge in list(new_graph.edges):
                 news_1 = data.loc[int(edge[0])]
                 try:
                     source_1 = Source.objects.get(name=news_1.source)
-                    print("Source created")
+                    print("Source already present")
                 except:
                     source_1 = Source.objects.create(name=news_1.source)
-                    print("Source already present")
+                    print("Source created")
 
                 ne_1 = News.objects.create(news_id=edge[0],title=news_1.title,body=news_1.text,source=source_1,publish_date=news_1.publish_date.to_pydatetime())
                 n1 = Node.objects.create(news=ne_1, color=new_graph.nodes[edge[0]]['color'])

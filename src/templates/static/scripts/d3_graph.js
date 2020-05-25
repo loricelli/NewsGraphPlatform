@@ -8,7 +8,7 @@ const ed = JSON.parse(document.getElementById('edges').textContent);
   fin_nd = JSON.parse(nd);
 
   width = 1200;
-  height = 800;
+  height = 600;
 
   var svg = d3.select("#chart").attr("width",width).attr("height",height);
   const simulation = d3.forceSimulation(fin_nd)

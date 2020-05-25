@@ -10,11 +10,19 @@ from pages.forms import CreateVoterForm
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from datetime import date,timedelta
-
+from .utils.view_utils import *
+import networkx as nx
 def home_view(request, *args, **kwargs):
 
-    dict_edges = [model_to_dict(obj) for obj in Edge.objects.all()]
-    dict_nodes = [model_to_dict(obj) for obj in Node.objects.all()]
+    edges = Edge.objects.all()
+    nodes = Node.objects.all()
+
+    graph = get_graph(edges)
+    fake_news = get_fake_news(graph)
+
+    dict_edges = [model_to_dict(obj) for obj in edges]
+    dict_nodes = [model_to_dict(obj) for obj in nodes]
+
     ser_edges = json.dumps(dict_edges)
     ser_nodes = json.dumps(dict_nodes)
     context = {
@@ -22,7 +30,8 @@ def home_view(request, *args, **kwargs):
         "nodes":ser_nodes,
         "tot_news": Node.objects.count(),
         "tot_usr": Voter.objects.count(),
-        "an_news": Node.objects.filter(~Q(color="violet")).count()
+        "an_news": Node.objects.filter(~Q(color="violet")).count(),
+        "fake_news": fake_news
     }
     return render(request,'home.html',context)
 
