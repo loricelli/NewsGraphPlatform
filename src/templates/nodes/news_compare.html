@@ -63,4 +63,28 @@
 </div>
 
 
+<script type="text/javascript" language="javascript">
+  // Warning
+  $(window).on('beforeunload', function(){
+    return "Any changes will be lost";
+  });
+  window.onunload = function(event) {
+    $.ajax({
+        type: 'POST',
+        async: false,
+        url: {% url 'leave' %},
+        data: {
+          'edge_id': "{{edge.id}}"
+        },
+        dataType: 'json'
+    });
+  };
+
+  //disable beforeunload for submit button
+  $(document).on("submit", "form", function(event){
+    $(window).off('beforeunload');
+    window.onunload = null;
+  });
+</script>
+
 {% endblock %}

@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from pages.views import home_view,signup,signin,signout
-from node.views import tail_news,head_news
+from node.views import tail_news,head_news,leave_page
 from confirmation.views import create_confirmation
 from voter.views import profile_page
 
@@ -29,6 +29,7 @@ urlpatterns = [
     path('profile/', profile_page,name='profile'),
     path('read_news/',tail_news,name='read'),
     path('compare_news/<int:edge_id>', head_news, name="compare"),
+    path('leave_page/', leave_page, name="leave"),
     path('confirm/<int:edge_id>-<int:vote>', create_confirmation, name="confirm"),
 
 ]

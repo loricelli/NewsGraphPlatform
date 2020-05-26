@@ -32,6 +32,8 @@ def save_confirmation(sender, instance, **kwargs):
     if ret is not None:
         edge = instance.edge
         edge.stance = ret
+        edge.usr_reading -= 1
+        edge.n_confirmations += 1
         edge.save()
         edge.color_edge()
         assign_points(edge)

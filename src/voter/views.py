@@ -5,7 +5,9 @@ from django.db.models import Count
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 from math import ceil
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='/signin/')
 def profile_page(request, *args, **kwargs):
     if request.user.is_authenticated:
         now = datetime.now(timezone.utc)

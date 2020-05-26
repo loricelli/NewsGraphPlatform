@@ -1,13 +1,18 @@
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q,F
 import random
 
+default_color = "violet"
+max_confirmations = 1
 
 class Edge(models.Model):
     tail = models.ForeignKey("node.Node", on_delete=models.CASCADE, related_name='tail')
     head = models.ForeignKey("node.Node", on_delete=models.CASCADE, related_name='head')
     color = models.CharField(max_length=7,default="#000000")
     stance = models.IntegerField(default=-1)
+    usr_reading = models.IntegerField(default=0)
+    n_confirmations = models.IntegerField(default=0)
+
 
 
     def __str__(self):
@@ -15,10 +20,11 @@ class Edge(models.Model):
 
     @classmethod
     def get_random_edge(self):
-        default_color = "violet"
-        edges_list = self._meta.model.objects.filter(~Q(tail__color=default_color),head__color=default_color,stance=-1)
+        edges_list = self._meta.model.objects.filter(~Q(tail__color=default_color),head__color=default_color,stance=-1,usr_reading__lt=max_confirmations-F("n_confirmations"))
         if edges_list:
             random_edge = random.choice(edges_list)
+            random_edge.usr_reading += 1
+            random_edge.save()
             return random_edge
         else:
             return edges_list
