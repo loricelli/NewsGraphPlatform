@@ -6,7 +6,9 @@ from collections import Counter
 from datetime import datetime
 
 max_confirmations = 1
-
+DISCUSS = 0
+AGREE = 1
+DISAGREE = 2
 class Confirmation(models.Model):
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
     edge = models.ForeignKey(Edge, on_delete=models.CASCADE)
@@ -19,8 +21,11 @@ def check_stance(edge):
         #TODO pareggio
         votes = [conf.vote for conf in confirmations]
         counter = Counter(votes)
-        most_common = counter.most_common(1)
-        return most_common[0][0]
+        if counter.get(AGREE) == counter.get(DISAGREE): #pareggio
+            return DISCUSS
+        else:
+            most_common = counter.most_common(1)
+            return most_common[0][0]
     return None
 
 
