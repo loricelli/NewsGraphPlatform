@@ -15,7 +15,7 @@ def tail_news(request, *args, **kwargs):
     if request.user.is_authenticated:
         try:
             with transaction.atomic():
-                edge = Edge.get_random_edge()
+                edge = Edge.get_random_edge(request.user)
         except IntegrityError:
             edge = []
 

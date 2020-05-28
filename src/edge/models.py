@@ -19,15 +19,24 @@ class Edge(models.Model):
         return str(self.tail)+ "-->"+str(self.head)
 
     @classmethod
-    def get_random_edge(self):
+    def get_random_edge(self,user):
         edges_list = self._meta.model.objects.filter(~Q(tail__color=default_color),head__color=default_color,stance=-1,usr_reading__lt=max_confirmations-F("n_confirmations"))
+
         if edges_list:
-            random_edge = random.choice(edges_list)
-            random_edge.usr_reading += 1
-            random_edge.save()
-            return random_edge
+            tmp_edges_list = list(edges_list)
+            while tmp_edges_list:
+                random_edge = random.choice(tmp_edges_list)
+                edge_conf_set = set(random_edge.confirmation_set.all())
+                user_conf_set = set(user.voter.confirmation_set.all())
+                if edge_conf_set.intersection(user_conf_set) == set():
+                    random_edge.usr_reading += 1
+                    random_edge.save()
+                    return random_edge
+                else:
+                    tmp_edges_list.remove(random_edge)
+            return [] #all edges already have a voter confirmation. He can't confirm twice
         else:
-            return edges_list
+            return  []
 
     def color_edge(self):
         discuss = 0

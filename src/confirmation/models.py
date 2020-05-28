@@ -18,7 +18,6 @@ class Confirmation(models.Model):
 def check_stance(edge):
     confirmations = Confirmation.objects.filter(edge=edge)
     if len(confirmations) >= max_confirmations:
-        #TODO pareggio
         votes = [conf.vote for conf in confirmations]
         counter = Counter(votes)
         if counter.get(AGREE) == counter.get(DISAGREE): #pareggio
