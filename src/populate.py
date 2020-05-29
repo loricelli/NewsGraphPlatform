@@ -29,7 +29,7 @@ data = data.sort_values(by='publish_date')
 data.reset_index(inplace=True,drop=True)
 
 
-new_graph = prova_grafo(data,30000,35000)
+new_graph = prova_grafo(data,30000,30300)
 nx.write_graphml(new_graph, "test.graphml")
 
 for edge in list(new_graph.edges):
@@ -68,14 +68,14 @@ for edge in list(new_graph.edges):
             new_added = Edge.objects.create(tail=n1,head=n2)
             old_graph.add_edge(new_added.tail.news.news_id,new_added.head.news.news_id)
 
-print("Create Superadmin.")
-user=User.objects.create_user('loricelli', password='1')
-user.is_superuser=True
-user.is_staff=True
-user.save()
-print("Done!")
-print("Create User.")
-user=User.objects.create_user('lorenzo', password='1')
-user.save()
-print("Done!")
+# print("Create Superadmin.")
+# user=User.objects.create_user('loricelli', password='1')
+# user.is_superuser=True
+# user.is_staff=True
+# user.save()
+# print("Done!")
+# print("Create User.")
+# user=User.objects.create_user('lorenzo', password='1')
+# user.save()
+# print("Done!")
 

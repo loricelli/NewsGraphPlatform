@@ -9,6 +9,7 @@ max_confirmations = 1
 DISCUSS = 0
 AGREE = 1
 DISAGREE = 2
+UNRELATED = 3
 class Confirmation(models.Model):
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
     edge = models.ForeignKey(Edge, on_delete=models.CASCADE)
@@ -20,11 +21,19 @@ def check_stance(edge):
     if len(confirmations) >= max_confirmations:
         votes = [conf.vote for conf in confirmations]
         counter = Counter(votes)
-        if counter.get(AGREE) == counter.get(DISAGREE): #pareggio
+        most_common = counter.most_common(1)
+
+        if most_common[0][0] == UNRELATED:
+            edge.delete()
+            return most_common[0][0]
+
+        elif counter.get(AGREE) == counter.get(DISAGREE): #pareggio
             return DISCUSS
+
         else:
             most_common = counter.most_common(1)
             return most_common[0][0]
+
     return None
 
 
@@ -32,8 +41,7 @@ def check_stance(edge):
 
 def save_confirmation(sender, instance, **kwargs):
     ret = check_stance(instance.edge)
-    print(instance.edge, ret)
-    if ret is not None:
+    if ret is not None and ret is not UNRELATED:
         edge = instance.edge
         edge.stance = ret
         edge.usr_reading -= 1

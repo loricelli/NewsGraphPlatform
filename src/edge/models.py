@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q,F
+from django.db.models.signals import post_delete
 import random
 
 default_color = "violet"
@@ -59,4 +60,30 @@ class Edge(models.Model):
             self.color = "#0b40d4"
         self.save()
 
+
+"""
+After an unrelated edge is deleted we have to check if its nodes are implied in other edges.
+It that's not the case, we delete the news and node too, to free space.
+If one of the node is paired with other edges we have to check for potential coloring issues.
+"""
+def evaluate_node(node):
+    in_edges = Edge.objects.filter(head=node)
+    out_edges = Edge.objects.filter(tail=node)
+
+    if not in_edges and not out_edges:
+        node.delete()
+    elif not in_edges and out_edges:
+        node.color = 'black'
+        node.save()
+
+def unrelated_deleted(sender, instance, **kwargs):
+    tail = instance.tail
+    head = instance.head
+
+    evaluate_node(tail)
+    evaluate_node(head)
+
+
+
+post_delete.connect(unrelated_deleted, sender=Edge)
 

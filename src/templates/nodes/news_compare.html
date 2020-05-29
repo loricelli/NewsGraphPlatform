@@ -37,22 +37,28 @@
       <div class="modal-footer">
         <div class="container">
           <div class="row" style="text-align:center;">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <form action={% url 'confirm' edge_id=edge.id vote=0 %}  method="POST">
                 {% csrf_token %}
                 <input type="submit" value="Discusses" class="btn btn-outline-primary" />
               </form>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <form action={% url 'confirm' edge_id=edge.id vote=1 %}  method="POST">
                 {% csrf_token %}
                 <input type="submit" value="Agrees" class="btn btn-outline-success"/>
               </form>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <form action={% url 'confirm' edge_id=edge.id vote=2 %}  method="POST">
                 {% csrf_token %}
                 <input type="submit" value="Disagrees" class="btn btn-outline-danger"/>
+              </form>
+            </div>
+            <div class="col-sm-3">
+              <form action={% url 'confirm' edge_id=edge.id vote=3 %}  method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Unrelated" class="btn btn-outline-warning"/>
               </form>
             </div>
           </div>
