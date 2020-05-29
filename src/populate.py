@@ -1,45 +1,42 @@
+from graph_construction import *
 from edge.models import Edge
 from node.models import Node
 from source.models import Source
 from news.models import News
 
-import networkx as nx
 import pandas as pd
+from django.contrib.auth.models import User
+
+import networkx as nx
 
 graph_path = "/home/loricelli/Desktop/small_text.graphml"
 data_path = "/home/loricelli/Github/thesis-spinoff/data/definitive_all.pkl"
+
+#extracts the existing graph from the platform
+
+old_graph = nx.DiGraph()
+for edge in Edge.objects.all():
+    old_graph.add_edge(edge.tail.news.news_id,edge.head.news.news_id)
+
+print("NewsGraph extracted!")
+
+
+
+
 data = pd.read_pickle(data_path)
 data.drop_duplicates(subset=['url'],inplace=True)
-
 data = data.sort_values(by='publish_date')
 data.reset_index(inplace=True,drop=True)
 
 
-data = data[30000:33000]
-new_graph = nx.read_graphml(graph_path)
-old_graph = nx.DiGraph()
-
-
-from django.contrib.auth.models import User
-user=User.objects.create_user('loricelli', password='1')
-user.is_superuser=True
-user.is_staff=True
-user.save()
-print("user creato")
-
-user=User.objects.create_user('lorenzo', password='1')
-user.save()
-
-for edge in Edge.objects.all():
-    old_graph.add_edge(str(edge.tail.news.news_id),str(edge.head.news.news_id))
-
-print(old_graph.edges)
+new_graph = prova_grafo(data,30000,35000)
+nx.write_graphml(new_graph, "test.graphml")
 
 for edge in list(new_graph.edges):
     if edge not in old_graph.edges:
-        if edge[0].isdigit():
+        if not isinstance(edge[0],str):
             if edge[0] not in old_graph.nodes:
-                news_1 = data.loc[int(edge[0])]
+                news_1 = data.loc[edge[0]]
                 try:
                     source_1 = Source.objects.get(name=news_1.source)
                     print("Source already present")
@@ -55,7 +52,7 @@ for edge in list(new_graph.edges):
 
 
             if edge[1] not in old_graph.nodes:
-                news_2 = data.loc[int(edge[1])]
+                news_2 = data.loc[edge[1]]
                 try:
                     source_2 = Source.objects.get(name=news_2.source)
                 except:
@@ -69,7 +66,16 @@ for edge in list(new_graph.edges):
 
 
             new_added = Edge.objects.create(tail=n1,head=n2)
-            old_graph.add_edge(str(new_added.tail.news.news_id),str(new_added.head.news.news_id))
+            old_graph.add_edge(new_added.tail.news.news_id,new_added.head.news.news_id)
 
-
+print("Create Superadmin.")
+user=User.objects.create_user('loricelli', password='1')
+user.is_superuser=True
+user.is_staff=True
+user.save()
+print("Done!")
+print("Create User.")
+user=User.objects.create_user('lorenzo', password='1')
+user.save()
+print("Done!")
 
