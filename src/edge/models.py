@@ -4,6 +4,13 @@ from django.db.models.signals import post_delete
 import random
 
 default_color = "violet"
+
+self_confirm_color = "#72ed61"
+confirm_color = "#196b0e"
+discuss_color = "#0b40d4"
+self_disagree_color = "#fa7b0c"
+disagree_color = "#bf0404"
+
 max_confirmations = 1
 
 class Edge(models.Model):
@@ -48,16 +55,16 @@ class Edge(models.Model):
         head_source = self.head.news.source
         if stance == agree:
             if tail_source != head_source:
-                self.color = "#196b0e"
+                self.color = confirm_color
             else:
-                self.color = "#72ed61"
+                self.color = self_confirm_color
         elif stance == disagree:
             if tail_source != head_source:
-                self.color = "#bf0404"
+                self.color = disagree_color
             else:
-                self.color = "#fa7b0c"
+                self.color = self_disagree_color
         elif stance == discuss:
-            self.color = "#0b40d4"
+            self.color = discuss_color
         self.save()
 
 
