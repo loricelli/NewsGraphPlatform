@@ -28,14 +28,10 @@
 
     <div class="col-md-6 offset-md-3">
       <div class="list-group list-group-hover">
-        {% for title,black,white,tot in fake_news %}
+        {% for title in fake_news %}
         <div class="list-group-item list-group-item-action flex-column align-items-start border-0 ">
           <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{title}}</h5>
-          </div>
-          <div class="progress" style="height:2px;margin-top:2%;">
-            <div class="progress-bar bg-danger" role="progressbar" style="width:{% widthratio  white tot 100%}%;" ></div>
-            <div class="progress-bar bg-success" role="progressbar" style="width:{% widthratio  black tot 100%}%;"></div>
+            <h3 class="mb-1">{{title}}</h3>
           </div>
           </div>
         {% endfor %}
@@ -43,6 +39,25 @@
     </div>
   </div>
 </div>
+
+<h1 class="home-titles" id="reliability"> SOURCE RELIABILITY</h1>
+<div class="container-fluid">
+  <div class="row home-row">
+
+    <div class="col-md-6 offset-md-3">
+      <div class="list-group list-group-hover">
+        {% for source,value in source_reliability.items%}
+        <div class="list-group-item list-group-item-action flex-column align-items-start border-0 ">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{source}}</h5> <h6 style="float:right;">{{value}}</h6>
+          </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <h1 class="home-titles" id="graph"> THE GRAPH</h1>
 <div class="container-fluid">

@@ -8,6 +8,9 @@ from django.db.models import Q
 class Node(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE)
     color = models.CharField(max_length=10,default="violet")
+    last_updated = models.DateTimeField(auto_now=True)
+    truth_value = models.FloatField(default=0.0)
+    fake = models.BooleanField(default=False)
 
     def check_all_confirm(self):
         in_edges = Edge.objects.filter(head=self)

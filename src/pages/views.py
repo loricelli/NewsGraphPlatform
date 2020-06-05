@@ -4,25 +4,33 @@ import json
 
 from edge.models import Edge
 from node.models import Node
+from source.models import Source
 from voter.models import Voter
 from django.db.models import Q
 from pages.forms import CreateVoterForm
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from datetime import date,timedelta
-from .utils.view_utils import *
 import networkx as nx
+
 def home_view(request, *args, **kwargs):
+
+
+    fake_nodes = Node.objects.filter(fake=True)
+    fake_news = [node.news.title for node in fake_nodes]
 
     edges = Edge.objects.all()
     nodes = Node.objects.all()
 
-    graph = get_graph(edges)
-    fake_news = get_fake_news(graph)
-
     dict_edges = [model_to_dict(obj) for obj in edges]
     dict_nodes = [model_to_dict(obj) for obj in nodes]
 
+    reliability = dict()
+    for source in Source.objects.all():
+        reliability[source.name] = source.reliability
+
+    reliability = {k: v for k, v in sorted(reliability.items(), key=lambda x: x[1],reverse=True)}
+    print(reliability)
     ser_edges = json.dumps(dict_edges)
     ser_nodes = json.dumps(dict_nodes)
     context = {
@@ -31,7 +39,8 @@ def home_view(request, *args, **kwargs):
         "tot_news": Node.objects.count(),
         "tot_usr": Voter.objects.count(),
         "an_news": Node.objects.filter(~Q(color="violet")).count(),
-        "fake_news": fake_news
+        "fake_news": fake_news,
+        "source_reliability": reliability
     }
     return render(request,'home.html',context)
 
