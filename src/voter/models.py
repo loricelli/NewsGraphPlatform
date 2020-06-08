@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 
 class Voter(models.Model):
-    points = models.IntegerField(default=0)
+    points = models.FloatField(default=0.0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     reading_time = models.FloatField(default=0.0)
     streak = models.IntegerField(default=1)
@@ -13,7 +13,11 @@ class Voter(models.Model):
         return self.user.username
 
     def increase_points(self):
-        self.points += 1
+        self.points += 1.0
+        self.save()
+
+    def decrease_points(self,penalty):
+        self.points -= penalty
         self.save()
 
 def create_user_profile(sender, instance, created, **kwargs):

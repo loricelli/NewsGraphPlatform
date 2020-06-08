@@ -58,6 +58,10 @@ def assign_points(edge):
     for conf in confirmations:
         if conf.vote == edge.stance:
             conf.voter.increase_points()
+        elif conf.vote in [AGREE,DISAGREE] and edge.stance == DISCUSS:
+            conf.voter.decrease_points(0.5)
+        elif (conf.vote == AGREE and edge.stance == DISAGREE) or (conf.vote == DISAGREE and edge.stance == AGREE):
+            conf.voter.decrease_points(1.0)
 
 
 
