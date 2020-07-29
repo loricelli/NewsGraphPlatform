@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 import spacy
-
 from networkx.classes.function import is_empty
 from networkx.algorithms import topological_sort
 
@@ -26,8 +25,11 @@ to_clean_sents = ['Sign up',"newsletter",'Subscribe to',"FILE PHOTO", "Click","P
 to_clean_urls = ['gallery','videos','michigansbest','lifestyle']
 to_clean_titles = ["?","!","Best","How to","Live Update"]
 
-PERCENTAGE = 0.60
+PERCENTAGE = 0.45
 
+def jaccard(a, b):
+    c = a.intersection(b)
+    return float(len(c)) / (len(a) + len(b) - len(c))
 
 def valid_item(text,to_clean_list):
   if any(ext in text for ext in to_clean_list):
@@ -40,8 +42,8 @@ def valid_item(text,to_clean_list):
 def custom_get_sents(text):
   sents = []
   for sent in nltk.sent_tokenize(text):
-    if valid_item(sent,to_clean_sents):
-      sents.append(sent)
+      if valid_item(sent,to_clean_sents) and not sent.islower() and not sent.isupper():
+          sents.append(sent)
   return sents
 
 def common_ents(set_ents_1,set_ents_2):
@@ -63,12 +65,12 @@ def get_perc(common,s1,s2):
   if len(common) > 0:
     MAX = max(len(s1),len(s2))
     MIN = min(len(s1),len(s2))
-    return len(common)*((1/MAX + 1/MIN)/2)
+    return jaccard(s1,s2)
   else:
     return 0
-  #return (2*len(common))/(MAX+MIN)
 
 def compare_ners(ner_set,news_graph,to_insert):
+
   same_news_list = []
   node_list = [node for node in news_graph.nodes.data(data=True) if node[1]['type'] == 'news']
 
@@ -76,7 +78,7 @@ def compare_ners(ner_set,news_graph,to_insert):
     node_ner_set = set(node[1]['ner_set'].split(";"))
     common_set = common_ents(ner_set,node_ner_set)
     percentage = get_perc(common_set,ner_set,node_ner_set)
-    #if (percentage > 0.5 and len(common_set) > 3) or (percentage > 0.25 and len(common_set) > 5):
+
     if percentage > PERCENTAGE and len(common_set) > 3:
       same_news_list.append(node[0])
   return same_news_list
@@ -90,7 +92,7 @@ def get_edge_nodes(node_a,node_b,data):
 def insert_news(to_insert,graph,news):
   sents =  [sent for sent in custom_get_sents(to_insert.text)]
   text = " ".join(sents)
-  text = " ".join(text.split()[:200])
+  text = " ".join(text.split()[:150])
 
   doc = nlp(text)
   ner_set = get_ner_set(doc)

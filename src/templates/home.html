@@ -28,13 +28,21 @@
 
     <div class="col-md-6 offset-md-3">
       <div class="list-group list-group-hover">
-        {% for title in fake_news %}
-        <div class="list-group-item list-group-item-action flex-column align-items-start border-0 ">
-          <div class="d-flex w-100 justify-content-between">
-            <h3 class="mb-1">{{title}}</h3>
+        {% if not fake_news %}
+          <div class="list-group-item list-group-item-action flex-column align-items-start border-0 ">
+            <div class="d-flex w-100 justify-content-between">
+              <h3 class="mb-1">No Fake News yet detected.</h3>
+            </div>
           </div>
-          </div>
-        {% endfor %}
+        {% else %}
+          {% for title,source in fake_news %}
+          <div class="list-group-item list-group-item-action flex-column align-items-start border-0 ">
+            <div class="d-flex w-100 justify-content-between">
+              <h3 class="mb-1">{{title}} - {{source}}</h3>
+            </div>
+            </div>
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
   </div>

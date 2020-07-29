@@ -70,16 +70,13 @@ class Edge(models.Model):
 
 """
 After an unrelated edge is deleted we have to check if its nodes are implied in other edges.
-It that's not the case, we delete the news and node too, to free space.
 If one of the node is paired with other edges we have to check for potential coloring issues.
 """
 def evaluate_node(node):
     in_edges = Edge.objects.filter(head=node)
     out_edges = Edge.objects.filter(tail=node)
 
-    if not in_edges and not out_edges:
-        node.delete()
-    elif not in_edges and out_edges:
+    if not in_edges:
         node.color = 'black'
         node.save()
 

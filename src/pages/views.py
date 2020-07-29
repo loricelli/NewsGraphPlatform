@@ -17,7 +17,7 @@ def home_view(request, *args, **kwargs):
 
 
     fake_nodes = Node.objects.filter(fake=True)
-    fake_news = [node.news.title for node in fake_nodes]
+    fake_news = [( node.news.title,node.news.source.name ) for node in fake_nodes]
 
     edges = Edge.objects.all()
     nodes = Node.objects.all()
