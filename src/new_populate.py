@@ -11,8 +11,7 @@ from django.contrib.auth.models import User
 
 import networkx as nx
 
-graph_path = "/home/loricelli/Desktop/small_text.graphml"
-data_path = "/home/loricelli/Github/thesis-spinoff/data/definitive_all.pkl"
+data_path = "INSERT_PATH_OF_PKL_SCRAPER"
 
 N_DAYS = 4
 TAIL_NODE = 0
